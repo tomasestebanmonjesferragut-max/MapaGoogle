@@ -20,6 +20,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.example.mapagoogle.databinding.ActivityMaps2Binding;
 
@@ -28,6 +29,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleMap mMap;
     private ActivityMaps2Binding binding;
     private FusedLocationProviderClient ubicacion;
+    private Marker puntoMarcado = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +55,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         LatLng starPoin = new LatLng(-33.498895, -70.616617);
         LatLng PuntoMoto = new LatLng(-33.498738, -70.616173);
         LatLng PuntoPoli = new LatLng(-33.498609, -70.615595);
+        LatLng PuntoDulce = new LatLng(-33.50797374644561, -70.79157437996089);
 
         mMap.addMarker(new MarkerOptions()
                 .position(starPoin)
@@ -72,11 +75,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .title("Poli")
                 .snippet("Carabinero cerca"));
 
+
+        mMap.addMarker(new MarkerOptions()
+                .position(PuntoDulce)
+                .icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_dulsuratuhogar_foreground))
+                .title("Pasteleria")
+                .snippet("Dulsura En Tu Hogar"));
+
+
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(starPoin, 18));
 
-        // Marca punto en la vista: al tocar el mapa se agrega un marcador
+        // Marca punto en la vista: solo uno, si se marca otro se quita el anterior
         mMap.setOnMapClickListener(punto -> {
-            mMap.addMarker(new MarkerOptions()
+            if (puntoMarcado != null) {
+                puntoMarcado.remove();
+            }
+            puntoMarcado = mMap.addMarker(new MarkerOptions()
                     .position(punto)
                     .title("Punto marcado")
                     .snippet("Toca este cartel para quitarlo"));
