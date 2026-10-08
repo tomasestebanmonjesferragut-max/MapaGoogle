@@ -1,6 +1,8 @@
 package com.example.mapagoogle;
 
 import android.os.Bundle;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -9,17 +11,9 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
+public class MainActivity extends AppCompatActivity {
 
-public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
-
-    private GoogleMap map = null;
+    private WebView map = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,37 +25,21 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             return insets;
         });
 
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
-    }
+        map = findViewById(R.id.map);
+        map.getSettings().setJavaScriptEnabled(true);
+        map.setWebViewClient(new WebViewClient());
 
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        map = googleMap;
-        map.getUiSettings().setZoomControlsEnabled(true);
-
-        LatLng starPoin = new LatLng(-33.498895, -70.616617);
-        LatLng PuntoMoto = new LatLng(-33.498738, -70.616173);
-        LatLng PuntoPoli = new LatLng(-33.498609, -70.615595);
-
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(starPoin, 18));
         Toast.makeText(this, "Tengo que ver el Codigo de la Discodia", Toast.LENGTH_SHORT).show();
 
-        map.addMarker(new MarkerOptions()
-                .position(starPoin)
-                .title("Hola ")
-                .snippet("Repartidor cerca"));
+        mostrarPunto(-33.498895, -70.616617);
 
-        map.addMarker(new MarkerOptions()
-                .position(PuntoMoto)
-                .icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_moto_foreground))
-                .title("Hola ")
-                .snippet("Repartidor cerca"));
+        findViewById(R.id.btnInicio).setOnClickListener(v -> mostrarPunto(-33.498895, -70.616617));
+        findViewById(R.id.btnMoto).setOnClickListener(v -> mostrarPunto(-33.498738, -70.616173));
+        findViewById(R.id.btnPoli).setOnClickListener(v -> mostrarPunto(-33.498609, -70.615595));
+    }
 
-        map.addMarker(new MarkerOptions()
-                .position(PuntoPoli)
-                .icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_poli_foreground))
-                .title("Hola ")
-                .snippet("Repartidor cerca"));
+    // Google Maps embebido: no necesita API key
+    private void mostrarPunto(double lat, double lon) {
+        map.loadUrl("https://maps.google.com/maps?q=" + lat + "," + lon + "&z=18&output=embed");
     }
 }
