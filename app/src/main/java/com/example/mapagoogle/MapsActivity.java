@@ -79,8 +79,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             mMap.addMarker(new MarkerOptions()
                     .position(punto)
                     .title("Punto marcado")
-                    .snippet(punto.latitude + ", " + punto.longitude));
+                    .snippet("Toca este cartel para quitarlo"));
             Toast.makeText(this, "Punto marcado", Toast.LENGTH_SHORT).show();
+        });
+
+        // Quitar punto: tocar el marcador y luego tocar su cartel
+        mMap.setOnInfoWindowClickListener(marker -> {
+            marker.remove();
+            Toast.makeText(this, "Punto quitado", Toast.LENGTH_SHORT).show();
         });
 
         // Geolocalizacion
