@@ -83,8 +83,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .snippet("Dulsura En Tu Hogar"));
 
 
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(starPoin, 18));
 
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(starPoin, 18));
         // Marca punto en la vista: solo uno, si se marca otro se quita el anterior
         mMap.setOnMapClickListener(punto -> {
             if (puntoMarcado != null) {
